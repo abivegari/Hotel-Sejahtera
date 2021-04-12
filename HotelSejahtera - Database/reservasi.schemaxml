@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemadesigner version="6.5">
+<source>
+<database charset="latin1" collation="latin1_swedish_ci">reservasi</database>
+</source>
+<canvas zoom="100">
+<tables>
+<table name="customer" view="colnames">
+<left>718</left>
+<top>-13</top>
+<width>148</width>
+<height>180</height>
+<sql_create_table>CREATE TABLE `customer` (
+  `no_ktp_customer` varchar(16) NOT NULL DEFAULT '',
+  `nama_customer` varchar(45) DEFAULT NULL,
+  `alamat_customer` varchar(100) DEFAULT NULL,
+  `no_telp_customer` varchar(15) DEFAULT NULL,
+  `email_customer` varchar(50) DEFAULT NULL,
+  `jenis_kelamin` varchar(9) DEFAULT NULL,
+  PRIMARY KEY (`no_ktp_customer`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="jabatan" view="colnames">
+<left>13</left>
+<top>49</top>
+<width>128</width>
+<height>112</height>
+<sql_create_table>CREATE TABLE `jabatan` (
+  `id_jabatan` int(11) NOT NULL AUTO_INCREMENT,
+  `nama_jabatan` varchar(15) DEFAULT NULL,
+  PRIMARY KEY (`id_jabatan`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="kamar" view="colnames">
+<left>535</left>
+<top>438</top>
+<width>100</width>
+<height>129</height>
+<sql_create_table>CREATE TABLE `kamar` (
+  `id_kamar` int(11) NOT NULL,
+  `kapasitas` int(11) DEFAULT NULL,
+  `id_room` int(11) DEFAULT NULL,
+  `status` varchar(11) DEFAULT NULL,
+  PRIMARY KEY (`id_kamar`),
+  KEY `id_room` (`id_room`),
+  CONSTRAINT `kamar_ibfk_1` FOREIGN KEY (`id_room`) REFERENCES `room` (`id_room`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="pegawai" view="colnames">
+<left>207</left>
+<top>24</top>
+<width>132</width>
+<height>231</height>
+<sql_create_table>CREATE TABLE `pegawai` (
+  `id_pegawai` int(11) NOT NULL AUTO_INCREMENT,
+  `nama_pegawai` varchar(50) DEFAULT NULL,
+  `no_telp` varchar(15) DEFAULT NULL,
+  `alamat` varchar(100) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `gaji` double DEFAULT NULL,
+  `username` varchar(15) DEFAULT NULL,
+  `password` varchar(8) DEFAULT NULL,
+  `id_jabatan` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_pegawai`),
+  KEY `id_jabatan` (`id_jabatan`),
+  CONSTRAINT `pegawai_ibfk_1` FOREIGN KEY (`id_jabatan`) REFERENCES `jabatan` (`id_jabatan`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="res_detail" view="colnames">
+<left>688</left>
+<top>223</top>
+<width>153</width>
+<height>214</height>
+<sql_create_table>CREATE TABLE `res_detail` (
+  `rd_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `no_reservasi` int(11) DEFAULT '0',
+  `quantity` int(11) DEFAULT '1',
+  `room_price` double DEFAULT '0',
+  `tanggal_check_in` date DEFAULT NULL,
+  `tanggal_check_out` date DEFAULT NULL,
+  `status_reservasi` varchar(10) DEFAULT NULL,
+  `id_room` int(11) DEFAULT NULL,
+  PRIMARY KEY (`rd_id`),
+  KEY `no_reservasi` (`no_reservasi`),
+  KEY `id_room` (`id_room`),
+  CONSTRAINT `res_detail_ibfk_1` FOREIGN KEY (`no_reservasi`) REFERENCES `reservasi` (`no_reservasi`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `res_detail_ibfk_2` FOREIGN KEY (`id_room`) REFERENCES `room` (`id_room`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="reservasi" view="colnames">
+<left>427</left>
+<top>83</top>
+<width>159</width>
+<height>180</height>
+<sql_create_table>CREATE TABLE `reservasi` (
+  `no_reservasi` int(11) NOT NULL AUTO_INCREMENT,
+  `tanggal_reservasi` date DEFAULT NULL,
+  `no_ktp_customer` varchar(16) DEFAULT '',
+  `total` double DEFAULT NULL,
+  `id_pegawai` int(11) DEFAULT NULL,
+  PRIMARY KEY (`no_reservasi`),
+  KEY `id_customer_FK` (`no_ktp_customer`),
+  KEY `id_pegawai` (`id_pegawai`),
+  CONSTRAINT `reservasi_ibfk_1` FOREIGN KEY (`no_ktp_customer`) REFERENCES `customer` (`no_ktp_customer`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `reservasi_ibfk_2` FOREIGN KEY (`id_pegawai`) REFERENCES `pegawai` (`id_pegawai`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="room" view="colnames">
+<left>294</left>
+<top>432</top>
+<width>113</width>
+<height>146</height>
+<sql_create_table>CREATE TABLE `room` (
+  `id_room` int(11) NOT NULL,
+  `jenis_room` varchar(20) DEFAULT NULL,
+  `harga` double DEFAULT '0',
+  `stock_room` int(11) DEFAULT '0',
+  PRIMARY KEY (`id_room`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+</tables>
+</canvas>
+</schemadesigner>
